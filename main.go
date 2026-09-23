@@ -19,5 +19,7 @@ var DefaultRules = map[string]string{
 }
 
 func main() {
-	fmt.Print(DefaultRules)
+	for i, v := range DefaultRules{
+		fmt.Printf("%s -> %v\n", i, v)
+	}
 }
