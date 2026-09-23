@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 var DefaultRules = map[string]string{
 	".jpg":  "Images",
@@ -18,8 +21,29 @@ var DefaultRules = map[string]string{
 	".rar":  "Archives",
 }
 
+type FileOrganizer struct {
+	sourceDir      string
+	rulesMap       map[string]string
+	processedFiles int
+	logFile        *os.File
+}
+
+func NewFileOrganizer(sourceDir string) (*FileOrganizer, error) {
+	if sourceDir == "" {
+		return nil, fmt.Errorf("Невалидный путь, пустая строка")
+	}
+	info, err := os.Stat(sourceDir)
+	if err != nil {
+		return nil, fmt.Errorf("Путь недоступен: %w", err)
+	}
+	if !info.IsDir() {
+		return nil, fmt.Errorf("Не явялеться путём к папке")
+	}
+	return &FileOrganizer{sourceDir: sourceDir}, nil
+}
+
 func main() {
-	for i, v := range DefaultRules{
+	for i, v := range DefaultRules {
 		fmt.Printf("%s -> %v\n", i, v)
 	}
 }
